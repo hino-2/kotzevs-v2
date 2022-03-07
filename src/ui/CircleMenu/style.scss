@@ -1,0 +1,195 @@
+$bg_color: #e9790b; // zeus color
+$icon_color: white;
+$green_color: #1e7e34;
+
+@mixin transition($duration) {
+	-webkit-transition-duration: $duration;
+	transition-duration: $duration;
+}
+
+@mixin translate3d($x, $y, $z) {
+	-webkit-transform: translate3d($x, $y, $z);
+	transform: translate3d($x, $y, $z);
+}
+
+@mixin translate3dScale($x, $y, $z, $scale) {
+	-webkit-transform: scale($scale, $scale) translate3d($x, $y, $z);
+	transform: scale($scale, $scale) translate3d($x, $y, $z);
+}
+
+.menu {
+	position: absolute;
+	left: var(--x);
+	top: var(--y);
+	box-sizing: border-box;
+	font-size: 20px;
+	text-align: left;
+	-webkit-filter: url("#goo");
+	filter: url("#goo");
+}
+
+.menu-open-button,
+.menu-item {
+	background: $bg_color;
+	position: absolute;
+	border-radius: 100%;
+	width: 60px;
+	height: 60px;
+	color: $icon_color;
+	text-align: center;
+	line-height: 60px;
+	@include translate3d(0, 0, 0);
+	-webkit-transition: -webkit-transform ease-out 200ms;
+	transition: -webkit-transform ease-out 200ms;
+	transition: transform ease-out 200ms;
+	transition: transform ease-out 200ms, -webkit-transform ease-out 200ms;
+	border: 0;
+}
+
+.menu-item:hover {
+	background: $icon_color;
+	color: $green_color;
+}
+
+.menu-item:nth-child(3),
+.menu-item:nth-child(4),
+.menu-item:nth-child(6),
+.menu-item:nth-child(8) {
+	@include transition(180ms);
+}
+
+.menu-open {
+	display: none;
+}
+
+.hamburger {
+	position: absolute;
+	display: block;
+	width: 25px;
+	height: 3px;
+	top: 50%;
+	left: 50%;
+	margin-left: -12.5px;
+	margin-top: -1.5px;
+	background: $icon_color;
+	-webkit-transition: -webkit-transform 200ms;
+	transition: -webkit-transform 200ms;
+	transition: transform 200ms;
+	transition: transform 200ms, -webkit-transform 200ms;
+}
+
+.hamburger-1 {
+	@include translate3d(0, -8px, 0);
+}
+
+.hamburger-2 {
+	@include translate3d(0, 0, 0);
+}
+
+.hamburger-3 {
+	@include translate3d(0, 8px, 0);
+}
+
+.menu-open:checked + .menu-open-button .hamburger-1 {
+	-webkit-transform: translate3d(0, 0, 0) rotate(45deg);
+	transform: translate3d(0, 0, 0) rotate(45deg);
+}
+.menu-open:checked + .menu-open-button .hamburger-2 {
+	-webkit-transform: translate3d(0, 0, 0) scale(0.1, 1);
+	transform: translate3d(0, 0, 0) scale(0.1, 1);
+}
+.menu-open:checked + .menu-open-button .hamburger-3 {
+	-webkit-transform: translate3d(0, 0, 0) rotate(-45deg);
+	transform: translate3d(0, 0, 0) rotate(-45deg);
+}
+
+.menu-open-button {
+	z-index: 2;
+	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	@include transition(400ms);
+	@include translate3dScale(0, 0, 0, 1.1);
+	cursor: pointer;
+}
+
+.menu-open-button:hover {
+	@include translate3dScale(0, 0, 0, 1.2);
+}
+
+.menu-open:checked + .menu-open-button {
+	-webkit-transition-timing-function: linear;
+	transition-timing-function: linear;
+	@include transition(200ms);
+	@include translate3dScale(0, 0, 0, 0.8);
+}
+
+.menu-open:checked ~ .menu-item {
+	-webkit-transition-timing-function: cubic-bezier(0.935, 0, 0.34, 1.33);
+	transition-timing-function: cubic-bezier(0.935, 0, 0.34, 1.33);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(3) {
+	@include transition(220ms);
+	@include translate3d(0.08361px, -104.99997px, 0);
+}
+.menu-open:checked ~ .menu-item:nth-child(3):hover {
+	@include transition(180ms);
+	@include translate3dScale(0.08361px, -90.99997px, 0, 1.2);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(4) {
+	@include transition(280ms);
+	@include translate3d(90.9466px, -52.47586px, 0);
+}
+.menu-open:checked ~ .menu-item:nth-child(4):hover {
+	@include transition(180ms);
+	@include translate3dScale(80.9466px, -48.47586px, 0, 1.2);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(6) {
+	@include transition(480ms);
+	@include translate3d(0.08361px, 104.99997px, 0);
+}
+.menu-open:checked ~ .menu-item:nth-child(6):hover {
+	@include transition(180ms);
+	@include translate3dScale(0.08361px, 90.99997px, 0, 1.2);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(8) {
+	@include transition(680ms);
+	@include translate3d(-91.03006px, -52.33095px, 0);
+}
+.menu-open:checked ~ .menu-item:nth-child(8):hover {
+	@include transition(180ms);
+	@include translate3dScale(-80.03006px, -48.33095px, 0, 1.2);
+}
+
+.menu-open:checked ~ .menu-item:nth-child(3):focus,
+.menu-open:checked ~ .menu-item:nth-child(4):focus,
+.menu-open:checked ~ .menu-item:nth-child(6):focus,
+.menu-open:checked ~ .menu-item:nth-child(8):focus,
+.close-button button:focus {
+	outline: none;
+}
+
+.close-button button {
+	z-index: 999;
+	position: absolute;
+	top: 14px;
+	right: 22px;
+	width: 60px;
+	height: 60px;
+	color: $icon_color;
+	background: $bg_color;
+	border: 0;
+	border-radius: 100%;
+	transition: -webkit-transform ease-out 200ms;
+	transition: transform ease-out 200ms;
+	transition: transform ease-out 200ms, -webkit-transform ease-out 200ms;
+}
+
+.close-button button:hover {
+	background: $icon_color;
+	color: $green_color;
+	@include translate3dScale(0, 0, 0, 1.2);
+}

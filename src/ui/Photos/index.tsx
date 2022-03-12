@@ -1,23 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
-import aws from "aws-sdk";
+import { fetchPhotoList } from "../../API";
+import { IPhotoItem } from "../../API/interfaces";
 import "./style.css";
-import { dbClient } from "../../aws/init";
 
 export const Photos = ({ headerElem }: { headerElem: HTMLElement | null }) => {
-	const [photoList, setPhotoList] = useState<aws.DynamoDB.DocumentClient.ItemList>([]);
+	const [photoList, setPhotoList] = useState<IPhotoItem[]>([]);
 
 	useEffect(() => {
-		dbClient.scan({ TableName: "photo-list" }, (err, data) => {
-			if (err) console.log(err);
-
-			const sortedData = data?.Items?.sort((a, b) => a.id - b.id) ?? [];
+		fetchPhotoList().then((photoList) => {
+			const sortedData = photoList.sort((a, b) => a.id - b.id) ?? [];
 
 			if (headerElem) headerElem.innerHTML = sortedData[0].header ?? "";
 
 			setPhotoList(sortedData);
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [headerElem]);
 
 	const photosBtnClick = useCallback(
 		(id: number) => {
@@ -35,7 +32,7 @@ export const Photos = ({ headerElem }: { headerElem: HTMLElement | null }) => {
 				{photoList.map((photo) => (
 					<li
 						key={photo.id}
-						id={"carousel__slide" + parseInt(photo.id)}
+						id={"carousel__slide" + photo.id}
 						tabIndex={0}
 						className="carousel__slide">
 						<div className="carousel__snapper">
@@ -61,7 +58,7 @@ export const Photos = ({ headerElem }: { headerElem: HTMLElement | null }) => {
 								className="carousel__next"
 								onClick={() => {
 									photosBtnClick(
-										photo.id + 1 > photoList.length ? "1" : photo.id + 1
+										photo.id + 1 > photoList.length ? 1 : photo.id + 1
 									);
 								}}>
 								{/* <font style={{ color: "transparent" }}>a</font> */}

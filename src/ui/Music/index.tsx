@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import aws from "aws-sdk";
 import "./style.scss";
 import Player from "./player";
 import { useEffect } from "react";
-import { dbClient } from "../../aws/init";
+import { fetchMusicList } from "../../API";
+import { IMusicItem } from "../../API/interfaces";
 
 const calcX = () => (410 * window.innerWidth) / 1200 - 285;
 const calcY = () => (335 * window.innerWidth) / 1200 - 335;
@@ -12,7 +12,7 @@ export const Music = ({ headerElem }: { headerElem: HTMLElement | null }) => {
 	const [xMenu, setXMenu] = useState(calcX());
 	const [yMenu, setYMenu] = useState(calcY());
 	const [currentSongIndex, setCurrentSongIndex] = useState(0);
-	const [musicList, setMusicList] = useState<aws.DynamoDB.DocumentClient.ItemList>([]);
+	const [musicList, setMusicList] = useState<IMusicItem[]>([]);
 	const [width, setWidth] = useState(window.innerWidth);
 
 	const updateMusicPosition = useCallback(() => {
@@ -24,12 +24,9 @@ export const Music = ({ headerElem }: { headerElem: HTMLElement | null }) => {
 	}, [width]);
 
 	useEffect(() => {
-		dbClient.scan({ TableName: "music-list" }, (err, data) => {
-			if (err) console.log("err", err);
-
-			setMusicList(data?.Items?.sort((a, b) => a.id - b.id) ?? []);
+		fetchMusicList().then((musicList) => {
+			setMusicList(musicList.sort((a, b) => a.id - b.id) ?? []);
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
